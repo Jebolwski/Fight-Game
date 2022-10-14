@@ -53,7 +53,14 @@ body {
 }
 
 .player1-block {
-  background-color: green;
+  width: 11.83vw;
+  height: 15vw;
+  background-image: url("./images/fighter1/block.gif");
+  transform: rotateY(180deg);
+}
+
+.player1-block-last_frane {
+  background-image: url("./images/fighter1/block_last_frame.gif");
 }
 
 .player1-crouch {

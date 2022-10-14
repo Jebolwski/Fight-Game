@@ -17,21 +17,39 @@ document.addEventListener("keydown", (event) => {
   map[event.key.toLowerCase()] = true;
   let player2 = document.querySelector(".player2");
   let player1 = document.querySelector(".player1");
+  let player1_right = parseInt(
+    $(".player1")
+      .css("right")
+      .slice(0, $(".player1")[0].style.left.length - 2)
+  );
+  let player2_right = parseInt(
+    $(".player2")
+      .css("right")
+      .slice(0, $(".player2")[0].style.left.length - 2)
+  );
   let player1_left = $(".player1")
     .css("left")
     .slice(0, player1.style.left.length - 2);
+
   if (map["l"]) {
-    player1.classList.add("player1-punch");
-    FIGHTER1_WIDTH = $(window).width() * 0.2256;
-    player1_hit_detection();
-    setTimeout(() => {
-      player1.classList.remove("player1-punch");
-      FIGHTER1_WIDTH = $(window).width() * 0.1456;
-    }, 400);
+    if (!$(".player1").hasClass("player1-punch")) {
+      player1.classList.add("player1-punch");
+      FIGHTER1_WIDTH = $(window).width() * 0.2256;
+      player1_hit_detection();
+      setTimeout(() => {
+        player1.classList.remove("player1-punch");
+        FIGHTER1_WIDTH = $(window).width() * 0.1456;
+      }, 400);
+    }
   }
 
-  if (map["k"] && !map["l"]) {
-    $(".player1").addClass("player1-block");
+  if (map["k"] && !map["l"] && !map["d"] && !map["a"]) {
+    if (!$(".player1").hasClass("player1-block")) {
+      $(".player1").addClass("player1-block");
+      setTimeout(() => {
+        $(".player1-block").addClass("player1-block-last_frane");
+      }, 400);
+    }
   } else {
     $(".player1").removeClass("player1-block");
   }
@@ -74,21 +92,21 @@ document.addEventListener("keydown", (event) => {
   if (map["w"]) {
     if (!$(".player1").hasClass("jump")) {
       $(".player1").addClass("jump");
+      setTimeout(() => {
+        if ($(".player1").hasClass("jump")) {
+          $(".player1").removeClass("jump");
+        }
+      }, 500);
     }
-    setTimeout(() => {
-      if ($(".player1").hasClass("jump")) {
-        $(".player1").removeClass("jump");
-      }
-    }, 500);
   }
 
   if (map["s"]) {
     if (!$(".player1").hasClass("player1-crouch")) {
       console.log("girdi");
       $(".player1").addClass("player1-crouch");
-    }
-    if ($(".player1").hasClass("player1-crouch")) {
-      $(".player1").delay(500).removeClass("player1-crouch");
+      setTimeout(() => {
+        $(".player1").removeClass("player1-crouch");
+      }, 500);
     }
   }
 
@@ -112,18 +130,6 @@ document.addEventListener("keydown", (event) => {
   } else {
     $(".player2").removeClass("player2-block");
   }
-
-  let player1_right = parseInt(
-    $(".player1")
-      .css("right")
-      .slice(0, $(".player1")[0].style.left.length - 2)
-  );
-
-  let player2_right = parseInt(
-    $(".player2")
-      .css("right")
-      .slice(0, $(".player2")[0].style.left.length - 2)
-  );
 
   if (map["arrowleft"]) {
     if (player2_right + FIGHTER1_WIDTH < player1_right) {
@@ -160,6 +166,7 @@ document.addEventListener("keyup", (event) => {
 document.addEventListener("keyup", (event) => {
   if (event.key == "k") {
     $(".player1").removeClass("player1-block");
+    $(".player1").removeClass("player1-block-last_frane");
   }
   if (event.key == "d") {
     $(".player1").removeClass("player1-walkfoward");
